@@ -1,4 +1,4 @@
-#esto lo hago al final
+
 
 0-positive_or_negative.c - se asiganan numeros aleatorios y con la condicional n se ejecuta if.
 
