@@ -1,47 +1,38 @@
+#include <stdio.h>
 #include "main.h"
-
 /**
- * print_times_table - prints the n times table, starting with 0
- * @n: number of the times table
+ * print_times_table - Generate a table until n times.
+ * @n: Number for the table.
+ * Return: void.
  */
 void print_times_table(int n)
 {
-int i, j, k;
+	int x, y, z;
 
-if (n >= 0 && n <= 15)
-{
-for (i = 0; i <= n; i++)
-{
-for (j = 0; j <= n; j++)
-{
-k = j * i;
-if (j == 0)
-{
-_putchar(k + '0');
-} else if (k < 10 && j != 0)
-{
-_putchar(',');
-_putchar(' ');
-_putchar(' ');
-_putchar(' ');
-_putchar(k + '0');
-} else if (k >= 10 && k < 100)
-{
-_putchar(',');
-_putchar(' ');
-_putchar(' ');
-_putchar((k / 10) + '0');
-_putchar((k % 10) + '0');
-} else if (k >= 100)
-{
-_putchar(',');
-_putchar(' ');
-_putchar((k / 100) + '0');
-_putchar(((k / 10) % 10) + '0');
-_putchar((k % 10) + '0');
-}
-}
-_putchar('\n');
-}
-}
+	for (x = 0; x <= n; x++)
+	{
+		for (y = 0; y <= n; y++)
+		{
+			z = x * y;
+			if (n > 15 || n < 0)
+				return;
+			if (y == 0)
+				printf("%d", z);
+			else if (y == n && z < 10 && z < 100)
+				printf(",   %d", z);
+			else if (y == n && z >= 10 && z < 100)
+				printf(",  %d", z);
+			else if (y == n && z >= 100 && z < 1000)
+				printf(", %d", z);
+			else if (z < 10)
+				printf(",   %d", z);
+			else if (z >= 10 && z < 100)
+				printf(",  %d", z);
+			else if (z >= 100 && z < 1000)
+				printf(", %d", z);
+			else
+				printf(",%d", z);
+		}
+		printf("\n");
+	}
 }
