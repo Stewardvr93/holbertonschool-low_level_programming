@@ -1,13 +1,11 @@
 #include "main.h"
-#include <inttypes.h>
+
 /**
-* _abs - hehe
-* @ab: abs
-* Return: value ab
-*/
-int _abs(int ab)
+ *
+ *
+ */
+
+int _abs(int n)
 {
-	if (ab < 0)
-		ab = ab * -1;
-	return (ab);
+
 }
