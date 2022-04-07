@@ -1,51 +1,50 @@
 #include "main.h"
+
+#define MSG97 "Usage: cp file_from file_to\n"
+#define MSG98 "Error: Can't read from file %s\n"
+#define MSG99 "Error: Can't write to %s\n"
+#define MSG100 "Error: Can't close fd %d\n"
+
 /**
- * main - Copia el contenido de un archivo a otro.
- * @argc: Recuento de argumentos.
- * @argv: Vector de argumentos.
- * Return: 0 si funciona.
- */
+ * main - copies the content of a file to another file
+ * @argc: number of arguments
+ * @argv: arguments
+ * Return: 0 on success or exits on error
+ **/
+
+
 int main(int argc, char *argv[])
 {
-	char limite[1024];
-	int SinoLe, Sicrear, LeGuar, cerrar, cerrar2,guardarWrite;
+	int file_from, file_to;
+	int len, c1, c2;
+	char buffer[1024];
+	mode_t perm = S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH;
 
 	if (argc != 3)
+		dprintf(STDERR_FILENO, MSG97), exit(97);
+	if (argv[1] == NULL)
+		dprintf(STDERR_FILENO, MSG98, argv[1]), exit(98);
+	if (argv[2] == NULL)
+		dprintf(STDERR_FILENO, MSG99, argv[2]), exit(99);
+
+	file_from = open(argv[1], O_RDONLY);
+	if (file_from == -1)
+		dprintf(STDERR_FILENO, MSG98, argv[1]), exit(98);
+
+	file_to = open(argv[2], O_TRUNC | O_CREAT | O_WRONLY, perm);
+	while ((len = read(file_from, buffer, 1024)) > 0)
 	{
-		dprintf(STDERR_FILENO, "Usage: cp file_from file_to\n");
-		exit(97);
+		if (file_to == -1 || (write(file_to, buffer, len) != len))
+			dprintf(STDERR_FILENO, MSG99, argv[2]), exit(99);
 	}
-	SinoLe = open(argv[1], O_RDONLY);
-	if (SinoLe == -1)
-	{
-		dprintf(STDERR_FILENO, "Error: Can't read from file %s\n", argv[1]);
-		exit(98);
-	}
-	Sicrear = open(argv[2], O_CREAT | O_WRONLY | O_TRUNC, 0664);
-	while ((LeGuar = read(SinoLe, limite, 1024)) > 0)
-	{
-		guardarWrite = write(Sicrear, limite, LeGuar);
-		if (guardarWrite < 0)
-		{
-			dprintf(STDERR_FILENO, "Error: Can't write to %s\n", argv[2]);
-			exit(99);
-		}
-	}
-	if (LeGuar == -1)
-	{
-		dprintf(STDERR_FILENO, "Error: Can't read from file %s\n", argv[1]);
-		exit(98);
-	}
-	cerrar = close(Sicrear);
-	cerrar2 = close(SinoLe);
-	if (cerrar2 == -1)
-	{
-		dprintf(STDERR_FILENO, "Error: Can't close fd %d\n", SinoLe), exit(100);
-	}
-	if (cerrar == -1)
-	{
-		dprintf(STDERR_FILENO, "Error: Can't close fd %d\n", Sicrear);
-		exit(100);
-	}
+	if (len == -1)
+		dprintf(STDERR_FILENO, MSG98, argv[1]), exit(98);
+
+	c1 = close(file_from);
+	if (c1 == -1)
+		dprintf(STDERR_FILENO, MSG100, file_from), exit(100);
+	c2 = close(file_to);
+	if (c2 == -1)
+		dprintf(STDERR_FILENO, MSG100, file_to), exit(100);
 	return (0);
 }
